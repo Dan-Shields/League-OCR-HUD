@@ -1,0 +1,16 @@
+{
+  "name": "league-ocr-hud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "grandiose": "0.0.4",
+    "jimp": "^0.16.1",
+    "tesseract.js": "^2.1.4"
+  }
+}
