@@ -12,5 +12,7 @@
     "grandiose": "0.0.4",
     "jimp": "^0.16.1",
     "tesseract.js": "^2.1.4"
+  "devDependencies": {
+    "eslint": "^7.22.0"
   }
 }
