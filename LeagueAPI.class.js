@@ -75,9 +75,9 @@ export class LeagueAPI extends EventEmitter {
         switch (event.EventName){
           case 'TurretKilled':
             if (event.TurretKilled.startsWith("Turret_T1")){
-              left_towers++
-            } else if (event.TurretKilled.startsWith("Turret_T2")){
               right_towers++
+            } else if (event.TurretKilled.startsWith("Turret_T2")){
+              left_towers++
             }
             break
           case 'ChampionKill':
