@@ -8,6 +8,7 @@ import Jimp from 'jimp'
 
 // Ours
 import NDI from './ndi.js'
+import { LeagueAPI } from './LeagueAPI.class.js'
 
 const GAME_FEED = {
     name: 'DAN-PC (LeagueIGD)',
@@ -15,13 +16,6 @@ const GAME_FEED = {
 }
 
 const imageSectors = [
-    {
-        left: 667,
-        top: 10,
-        width: 57,
-        height: 34,
-        name: 'left_towers'
-    },
     {
         left: 758,
         top: 7,
@@ -35,20 +29,6 @@ const imageSectors = [
         width: 90,
         height: 45,
         name: 'right_gold'
-    },
-    {
-        left: 905,
-        top: 15,
-        width: 61,
-        height: 48,
-        name: 'left_kills'
-    },
-    {
-        left: 966,
-        top: 15,
-        width: 61,
-        height: 48,
-        name: 'right_kills'
     },
     {
         left: 1804,
@@ -92,6 +72,13 @@ async function run () {
     const client = new vision.ImageAnnotatorClient({
         credentials: JSON.parse(fs.readFileSync('./CV.keys.json'))
     })
+
+    const leagueapi = new LeagueAPI()
+
+    leagueapi.on("update", data => {
+        writeData(data)
+    })
+
 
     const ndi = new NDI()
 
@@ -172,7 +159,7 @@ process.on('SIGINT', async () => {
 
 const pendingWrites = []
 
-async function writeData(data) {
+function writeData(data) {
     Object.keys(data).forEach(key => {
         if (pendingWrites.find(str => str === key)) {
             console.log('writing too fast!')
