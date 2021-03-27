@@ -4,7 +4,7 @@
 0. Install Node.js >= v15
 1. Follow the [Cloud Vision API quickstart](https://cloud.google.com/vision/docs/setup#project) up to the point where you get your keys JSON file
 2. Clone (or download) this repo to somewhere to your production PC: `git clone https://github.com/Dan-Shields/League-OCR-HUD.git`
-3. Copy the CV keys JSON file into the newly created directory
+3. Copy the CV keys JSON file into the newly created directory and rename it to `CV.keys.json`
 4. Install dependencies: `npm i --production`
 
 ## Usage
