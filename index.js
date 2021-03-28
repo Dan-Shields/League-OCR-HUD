@@ -15,7 +15,9 @@ const GAME_FEED = {
     urlAddress: '192.168.0.24:5963'
 }
 
-const imageSectors = [
+const OUTPUT_DIR = path.join(process.cwd(), '/output/')
+
+const IMAGE_SECTORS = [
     {
         left: 758,
         top: 7,
@@ -57,9 +59,9 @@ function isBoundingPolyInSector(boundingPoly, sector) {
 }
 
 function getImageSectorNameFromBoundingPoly(boundingPoly) {
-    for (let i = 0; i < imageSectors.length; i++) {
-        if (isBoundingPolyInSector(boundingPoly, imageSectors[i])) {
-            return imageSectors[i].name
+    for (let i = 0; i < IMAGE_SECTORS.length; i++) {
+        if (isBoundingPolyInSector(boundingPoly, IMAGE_SECTORS[i])) {
+            return IMAGE_SECTORS[i].name
         }
     }
 
@@ -85,7 +87,7 @@ async function run () {
     ndi.on('frame', async frame => {
         if (!frame.data || processing) return
 
-        console.time('process time')
+        console.time('OCR process time')
 
         processing = true
 
@@ -101,9 +103,6 @@ async function run () {
 
             const buffer = await cropped.getBufferAsync('image/png')
 
-            console.log('encoded frame')
-            console.time('cv api recog')
-
             const request = {
                 image: {
                     content: buffer
@@ -117,30 +116,26 @@ async function run () {
                 if (!annotation.description) return
 
                 const sectorName = getImageSectorNameFromBoundingPoly(annotation.boundingPoly)
-                if (sectorName) {
-                    if (sectorName === 'baron_timer' || sectorName === 'drake_timer') {
-                        if (annotation.description.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
-                            data[sectorName] = annotation.description
-                        }
-                    } else if (sectorName === 'left_kills' || sectorName === 'right_kills') {
-                        if (!isNaN(parseInt(annotation.description))) {
-                            data[sectorName] = annotation.description
-                        }
-                    } else if (sectorName === 'left_gold' || sectorName === 'right_gold') {
-                        if (annotation.description.match(/^[0-9.]*k$/)) {
-                            data[sectorName] = annotation.description
-                        }
-                    } else {
+                if (sectorName === 'baron_timer' || sectorName === 'drake_timer') {
+                    if (annotation.description.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
                         data[sectorName] = annotation.description
                     }
+                } else if (sectorName === 'left_kills' || sectorName === 'right_kills') {
+                    if (!isNaN(parseInt(annotation.description))) {
+                        data[sectorName] = annotation.description
+                    }
+                } else if (sectorName === 'left_gold' || sectorName === 'right_gold') {
+                    if (annotation.description.match(/^[0-9.]*k$/)) {
+                        data[sectorName] = annotation.description
+                    }
+                } else if (sectorName !== null) {
+                    data[sectorName] = annotation.description
                 }
             })
 
-            console.log(data)
             writeData(data)
 
-            console.timeEnd('cv api recog')
-            console.timeEnd('process time')
+            console.timeEnd('OCR process time')
 
             processing = false
         })
@@ -149,9 +144,11 @@ async function run () {
     ndi.start(GAME_FEED)
 }
 
+fs.mkdirSync(OUTPUT_DIR, { recursive: true })
+
 run()
 
-process.on('SIGINT', async () => {
+process.on('SIGINT', () => {
     console.log("Caught interrupt signal")
 
     process.exit()     
@@ -162,15 +159,15 @@ const pendingWrites = []
 function writeData(data) {
     Object.keys(data).forEach(key => {
         if (pendingWrites.find(str => str === key)) {
-            console.log('writing too fast!')
+            console.log(`writing "${key}" too fast!`)
             return
         }
 
-        const txtPath = path.join(process.cwd(), '/output/', `${key}.txt`)
+        const txtPath = path.join(OUTPUT_DIR, `${key}.txt`)
 
         pendingWrites.push(key)
 
-        fs.writeFile(txtPath, data[key], 'utf8', () => {
+        fs.writeFile(txtPath, String(data[key]), 'utf8', (err) => {
             const index = pendingWrites.indexOf(key)
             pendingWrites.splice(index, 1)
         })
