@@ -2,9 +2,9 @@ import { EventEmitter } from 'events'
 import { Worker } from 'worker_threads'
 
 export default class NDI extends EventEmitter {
-    start(gameFeedData) {
-        const worker = new Worker('./ndi_worker.js', {
-            workerData: gameFeedData
+    start(gameFeedName) {
+        const worker = new Worker('./src/ndi_worker.js', {
+            workerData: gameFeedName
         })
     
         worker.on('message', data => {
