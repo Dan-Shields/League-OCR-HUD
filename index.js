@@ -120,7 +120,7 @@ async function run () {
                 return
             }
 
-            const cropped = await image.crop(0, 0, 1920, 100)
+            const cropped = await image.crop(0, 0, 1920, 70)
 
             const buffer = await cropped.getBufferAsync('image/png')
 
