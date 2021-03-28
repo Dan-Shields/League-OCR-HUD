@@ -97,7 +97,7 @@ export class LeagueAPI extends EventEmitter {
         } catch (error) {
             if (error.code === 'ECONNREFUSED') {
                 if (!this.disconnected) {
-                    console.error(error)
+                    console.log("COULDN'T CONNECT TO LEAGUE API")
                     this.disconnected = true
                 }
             } else {
