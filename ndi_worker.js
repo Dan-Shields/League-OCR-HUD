@@ -4,16 +4,25 @@ import grandiose from 'grandiose'
 
 const fps = 1
 
+let sources
+
 grandiose.find({
     showLocalSources: true
 })
-    .then(sources => {
-        console.log(sources)
+    .then(foundSources => {
+        sources = foundSources
         start(workerData)
     })
     .catch(console.error)
 
-async function start(source) {
+async function start(sourceName) {
+    const source = sources.find(source => source.name === sourceName)
+
+    if (!source) {
+        console.log(`NDI source "${sourceName}" not found.`)
+        return
+    }
+
     const receiver = await grandiose.receive({ 
         source: source,
         colorFormat: grandiose.COLOR_FORMAT_RGBX_RGBA,
