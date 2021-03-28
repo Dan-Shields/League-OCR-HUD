@@ -11,7 +11,8 @@ import NDI from './ndi.js'
 import { LeagueAPI } from './LeagueAPI.class.js'
 
 let config = {
-    outputDir: './output'
+    outputDir: './output',
+    googleCVKeysFile: './CV.keys.json'
 }
 
 if (fs.existsSync('./config.json')) {
@@ -36,6 +37,21 @@ if (fs.existsSync('./config.json')) {
 if (!config.ndiFeed) {
     console.log('"ndiFeed" key not found in config.json.')
     process.exit(1)
+}
+
+
+const CV_CREDENTIALS_PATH = path.join(process.cwd(), config.googleCVKeysFile)
+let cvCredentials
+
+if (!fs.existsSync(CV_CREDENTIALS_PATH)) {
+    console.log(`Google CV keys file not found at ${config.googleCVKeysFile}.`)
+    process.exit(1)
+} else {
+    try {
+        cvCredentials = JSON.parse(fs.readFileSync(CV_CREDENTIALS_PATH))
+    } catch (err) {
+        console.log("Couldn't read CV credentials file")
+    }
 }
 
 const OUTPUT_DIR = path.join(process.cwd(), config.outputDir)
@@ -96,7 +112,7 @@ let processing = false
 
 async function run () {
     const client = new vision.ImageAnnotatorClient({
-        credentials: JSON.parse(fs.readFileSync('./CV.keys.json'))
+        credentials: cvCredentials
     })
 
     const leagueapi = new LeagueAPI()
@@ -104,7 +120,6 @@ async function run () {
     leagueapi.on("update", data => {
         writeData(data)
     })
-
 
     const ndi = new NDI()
 

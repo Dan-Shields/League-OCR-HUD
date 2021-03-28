@@ -1,4 +1,5 @@
 {
 	"ndiFeed": "PC-NAME (Source Name)",
-	"outputDir": "./output"
+	"outputDir": "./output",
+	"googleCVKeysFile": "./CV.keys.json"
 }
