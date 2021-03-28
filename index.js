@@ -10,12 +10,36 @@ import Jimp from 'jimp'
 import NDI from './ndi.js'
 import { LeagueAPI } from './LeagueAPI.class.js'
 
-const GAME_FEED = {
-    name: 'DAN-PC (LeagueIGD)',
-    urlAddress: '192.168.0.24:5963'
+let config = {
+    outputDir: './output'
 }
 
-const OUTPUT_DIR = path.join(process.cwd(), '/output/')
+if (fs.existsSync('./config.json')) {
+    try {
+        const configFileData = JSON.parse(fs.readFileSync('./config.json'))
+        
+        if (!typeof configFileData === 'object' && configFileData !== null) {
+            console.log('config.json was not an object.')
+            process.exit(1)
+        }
+        
+        config = Object.assign(config, configFileData)
+    } catch (err) {
+        console.log("Couldn't read config.json")
+        process.exit(1)
+    }    
+} else {
+    console.log('No config found, please create one (config.json) and specify ndiFeed.')
+    process.exit(1)
+}
+
+if (!config.ndiFeed) {
+    console.log('"ndiFeed" key not found in config.json.')
+    process.exit(1)
+}
+
+const OUTPUT_DIR = path.join(process.cwd(), config.outputDir)
+fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
 const IMAGE_SECTORS = [
     {
@@ -90,9 +114,6 @@ async function run () {
         console.time('OCR process time')
 
         processing = true
-
-        console.log('started processing frame')
-
         new Jimp({ data: frame.data, width: 1920, height: 1080 }, async (err, image) => {
             if (err) {
                 console.log(err)
@@ -141,10 +162,8 @@ async function run () {
         })
     })
 
-    ndi.start(GAME_FEED)
+    ndi.start(config.ndiFeed)
 }
-
-fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
 run()
 
