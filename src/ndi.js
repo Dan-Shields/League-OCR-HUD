@@ -3,7 +3,7 @@ import { Worker } from 'worker_threads'
 
 export default class NDI extends EventEmitter {
     start(gameFeedName) {
-        const worker = new Worker('./src/ndi_worker.js', {
+        const worker = new Worker(new URL('./ndi_worker.js', import.meta.url), {
             workerData: gameFeedName
         })
     
@@ -13,8 +13,8 @@ export default class NDI extends EventEmitter {
             }
         })
     
-        worker.on('error', () => {
-            console.error('error in ndi worker')
+        worker.on('error', (e) => {
+            console.error(`error in ndi worker: ${e}`)
         })
     
         worker.on('exit', (code) => {
