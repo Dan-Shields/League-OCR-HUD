@@ -23,10 +23,10 @@ The output filenames are the above values plus `.txt`.
 
 ## Installation
 
-### From Release (recommended)
+### Option 1: From Release (recommended)
 Download and unzip the [latest release](https://github.com/Dan-Shields/League-OCR-HUD/releases/latest)
 
-### From Source
+### Option 2: From Source
 1. Install [Node.js](https://nodejs.org/en/download/current/) `>=15`, Python 3, [C++ Redistributable for x64](https://visualstudio.microsoft.com/downloads/#other-family)
 2. Clone this repo to somewhere to your production PC
 3. Install dependencies: `npm i --production`
