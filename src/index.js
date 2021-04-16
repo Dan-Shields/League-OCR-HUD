@@ -39,7 +39,6 @@ if (!config.ndiFeed) {
     process.exit(1)
 }
 
-
 const CV_CREDENTIALS_PATH = path.join(process.cwd(), config.googleCVKeysFile)
 let cvCredentials
 
@@ -54,7 +53,7 @@ if (!fs.existsSync(CV_CREDENTIALS_PATH)) {
     }
 }
 
-const OUTPUT_DIR = path.join(process.cwd(), config.outputDir)
+const OUTPUT_DIR = path.isAbsolute(config.outputDir) ? config.outputDir : path.join(process.cwd(), config.outputDir)
 fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
 const IMAGE_SECTORS = [
