@@ -1,5 +1,6 @@
 # League OCR HUD
 
+
 ## About
 This program creates and updates several .txt files with the latest game state data available, including tower kills, gold, timers etc. These files can then be used in OBS or vMix to update a HUD graphic.
 
@@ -14,6 +15,9 @@ Right now, the available data is as follows:
 - drake_timer
 
 The output filenames are the above values plus `.txt`.
+
+## Setup Assistance
+If you're struggling to setup this program or want professional installation I'm available for hire. Please contact me at <hello@danielshields.uk>
 
 ## Prerequisites
 - Windows 10 64-bit
