@@ -16,8 +16,8 @@ Right now, the available data is as follows:
 
 The output filenames are the above values plus `.txt`.
 
-## Setup Assistance
-If you're struggling to setup this program or want professional installation I'm available for hire. Please contact me at <hello@danielshields.uk>
+## Support Requests
+If you're struggling to setup this program and want professional installation or are looking to get the program further developed, I'm available for hire. Please contact me at <hello@danielshields.uk>
 
 ## Prerequisites
 - Windows 10 64-bit
