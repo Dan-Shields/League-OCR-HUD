@@ -83,7 +83,6 @@ const OUTPUT_DIR = path.isAbsolute(config.outputDir)
     : path.join(process.cwd(), config.outputDir)
 fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
-
 function isBoundingPolyInSector(boundingPoly, sector) {
     for (let i = 0; i < boundingPoly.vertices.length; i++) {
         if (
@@ -124,120 +123,134 @@ async function run() {
     const ndi = new NDI()
 
     const maskImg = await Jimp.read('./src/mask.png')
-    new Jimp(1920, 70, '#000000',
-        async (err, blankImg) => {
-            if (err) {
-                console.log(err)
-                return
-            }
+    new Jimp(1920, 70, '#000000', async (err, blankImg) => {
+        if (err) {
+            console.log(err)
+            return
+        }
 
-            ndi.on('frame', async (frame) => {
-                if (!frame.data || processing) return
+        ndi.on('frame', async (frame) => {
+            if (!frame.data || processing) return
 
-                console.time('OCR process time')
+            console.time('OCR process time')
 
-                processing = true
-                new Jimp(
-                    { data: frame.data, width: 1920, height: 1080 },
-                    async (err, image) => {
-                        if (err) {
-                            console.log(err)
-                            return
-                        }
+            processing = true
+            new Jimp(
+                { data: frame.data, width: 1920, height: 1080 },
+                async (err, image) => {
+                    if (err) {
+                        console.log(err)
+                        return
+                    }
 
-                        const processed = await image
-                            .crop(0, 0, 1920, 70)
-                            .background(0x000000ff)
-                            .mask(maskImg, 0, 0)
-                            .contrast(1)
-                            .threshold({ max: 50 })
-                            .composite(blankImg, 0, 0, { mode: Jimp.BLEND_DESTINATION_OVER })
+                    const processed = await image
+                        .crop(0, 0, 1920, 70)
+                        .background(0x000000ff)
+                        .mask(maskImg, 0, 0)
+                        .contrast(1)
+                        .threshold({ max: 50 })
+                        .composite(blankImg, 0, 0, {
+                            mode: Jimp.BLEND_DESTINATION_OVER,
+                        })
 
-                        await processed.write('processed.png')
+                    await processed.write('processed.png')
 
-                        const buffer = await processed.getBufferAsync('image/png')
+                    const buffer = await processed.getBufferAsync('image/png')
 
-                        const request = {
-                            image: {
-                                content: buffer,
-                            },
-                            imageContext: {
-                                // This is to stop it detecting non-latin characters instead of numbers
-                                languageHints: ["en"]
-                            }
-                        }
-                        const [result] = await client.textDetection(request)
+                    const request = {
+                        image: {
+                            content: buffer,
+                        },
+                        imageContext: {
+                            // This is to stop it detecting non-latin characters instead of numbers
+                            languageHints: ['en'],
+                        },
+                    }
+                    const [result] = await client.textDetection(request)
 
-                        const data = {}
-                        console.log(
-                            result.textAnnotations.map((annotation) => {
-                                return annotation.description
-                            })
-                        )
-                        const annotations = result.textAnnotations.map((annotation) => {
+                    const data = {}
+                    console.log(
+                        result.textAnnotations.map((annotation) => {
+                            return annotation.description
+                        })
+                    )
+                    const annotations = result.textAnnotations.map(
+                        // stop '0's being recognized as 'D's
+                        (annotation) => {
                             return {
                                 ...annotation,
-                                description: annotation.description == 'D' ? '0' : annotation.description
+                                description:
+                                    annotation.description == 'D'
+                                        ? '0'
+                                        : annotation.description,
                             }
+                        }
+                    )
 
-                        })
-                        annotations.forEach((annotation) => {
-                            if (!annotation.description) return
+                    let baronAlive = true
+                    let drakeAlive = true
 
-                            const sectorName = getImageSectorNameFromBoundingPoly(
-                                annotation.boundingPoly
-                            )
+                    annotations.forEach((annotation) => {
+                        if (!annotation.description) return
+
+                        const sectorName = getImageSectorNameFromBoundingPoly(
+                            annotation.boundingPoly
+                        )
+                        if (
+                            sectorName === 'baron_timer' ||
+                            sectorName === 'drake_timer'
+                        ) {
+                            if (sectorName === 'baron_timer') baronAlive = false
+                            if (sectorName === 'drake_timer') drakeAlive = false
+
                             if (
-                                sectorName === 'baron_timer' ||
-                                sectorName === 'drake_timer'
+                                annotation.description.match(
+                                    /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+                                )
                             ) {
-                                if (
-                                    annotation.description.match(
-                                        /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
-                                    )
-                                ) {
-                                    data[sectorName] = annotation.description
-                                } else {
-                                    data[sectorName] = ''
-                                }
-                            } else if (
-                                sectorName === 'left_kills' ||
-                                sectorName === 'right_kills' ||
-                                sectorName === 'left_towers' ||
-                                sectorName === 'right_towers' ||
-                                sectorName === 'left_heralds' ||
-                                sectorName === 'right_heralds' ||
-                                sectorName === 'left_drakes' ||
-                                sectorName === 'right_drakes'
-                            ) {
-                                if (!isNaN(parseInt(annotation.description))) {
-                                    data[sectorName] = annotation.description
-                                }
-                            } else if (
-                                sectorName === 'left_gold' ||
-                                sectorName === 'right_gold'
-                            ) {
-                                if (annotation.description.match(/^[0-9.]*k$/)) {
-                                    data[sectorName] = annotation.description
-                                }
-                            } else if (sectorName !== null) {
+                                data[sectorName] = annotation.description
+                            } else {
+                                data[sectorName] = ''
+                            }
+                        } else if (
+                            sectorName === 'left_kills' ||
+                            sectorName === 'right_kills' ||
+                            sectorName === 'left_towers' ||
+                            sectorName === 'right_towers' ||
+                            sectorName === 'left_heralds' ||
+                            sectorName === 'right_heralds' ||
+                            sectorName === 'left_drakes' ||
+                            sectorName === 'right_drakes'
+                        ) {
+                            if (!isNaN(parseInt(annotation.description))) {
                                 data[sectorName] = annotation.description
                             }
-                        })
+                        } else if (
+                            sectorName === 'left_gold' ||
+                            sectorName === 'right_gold'
+                        ) {
+                            if (annotation.description.match(/^[0-9.]*k$/)) {
+                                data[sectorName] = annotation.description
+                            }
+                        } else if (sectorName !== null) {
+                            data[sectorName] = annotation.description
+                        }
+                    })
 
-                        writeData(data)
-                        console.log(data)
+                    if (baronAlive) data['baron_timer'] = ''
+                    if (drakeAlive) data['drake_timer'] = ''
 
-                        console.timeEnd('OCR process time')
+                    writeData(data)
 
-                        processing = false
-                    }
-                )
-            })
+                    console.timeEnd('OCR process time')
 
-            ndi.start(config.ndiFeed)
-        }
-    )
+                    processing = false
+                }
+            )
+        })
+
+        ndi.start(config.ndiFeed)
+    })
 }
 
 run()
