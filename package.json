@@ -19,6 +19,10 @@
     "jimp": "^0.16.1"
   },
   "devDependencies": {
+    "@jimp/custom": ">=0.3.5",
+    "@jimp/plugin-color": ">=0.8.0",
+    "@jimp/plugin-resize": ">=0.8.0",
+    "@jimp/plugin-threshold": "^0.16.1",
     "caxa": "^1.0.0",
     "eslint": "^7.22.0"
   }

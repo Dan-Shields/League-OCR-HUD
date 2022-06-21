@@ -1,0 +1,86 @@
+[
+    {
+        "name": "drake_timer",
+        "left": 79,
+        "top": 36,
+        "width": 69,
+        "height": 34
+    },
+    {
+        "name": "left_drakes",
+        "left": 532,
+        "top": 5,
+        "width": 58,
+        "height": 32
+    },
+    {
+        "name": "left_towers",
+        "left": 707,
+        "top": 5,
+        "width": 58,
+        "height": 32
+    },
+    {
+        "name": "left_heralds",
+        "left": 619,
+        "top": 5,
+        "width": 58,
+        "height": 32
+    },
+    {
+        "name": "left_gold",
+        "left": 790,
+        "top": 7,
+        "width": 70,
+        "height": 45
+    },
+    {
+        "name": "left_kills",
+        "left": 897,
+        "top": 17,
+        "width": 55,
+        "height": 36
+    },
+    {
+        "name": "right_kills",
+        "left": 980,
+        "top": 17,
+        "width": 55,
+        "height": 36
+    },
+    {
+        "name": "right_gold",
+        "left": 1112,
+        "top": 7,
+        "width": 70,
+        "height": 45
+    },
+    {
+        "name": "right_towers",
+        "left": 1233,
+        "top": 5,
+        "width": 58,
+        "height": 32
+    },
+    {
+        "name": "right_heralds",
+        "left": 1315,
+        "top": 5,
+        "width": 58,
+        "height": 32
+    },
+    {
+        "name": "right_drakes",
+        "left": 1401,
+        "top": 5,
+        "width": 58,
+        "height": 32
+    },
+    {
+        "name": "baron_timer",
+        "left": 1810,
+        "top": 36,
+        "width": 72,
+        "height": 35
+    }
+]
