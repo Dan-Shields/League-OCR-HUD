@@ -196,44 +196,52 @@ async function run() {
                         const sectorName = getImageSectorNameFromBoundingPoly(
                             annotation.boundingPoly
                         )
-                        if (
-                            sectorName === 'baron_timer' ||
-                            sectorName === 'drake_timer'
-                        ) {
-                            if (sectorName === 'baron_timer') baronAlive = false
-                            if (sectorName === 'drake_timer') drakeAlive = false
 
-                            if (
-                                annotation.description.match(
-                                    /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
-                                )
-                            ) {
+                        if (!sectorName) return
+
+                        switch (sectorName) {
+                            case 'baron_timer':
+                            case 'drake_timer':
+                                if (sectorName === 'baron_timer')
+                                    baronAlive = false
+                                if (sectorName === 'drake_timer')
+                                    drakeAlive = false
+
+                                if (
+                                    annotation.description.match(
+                                        /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+                                    )
+                                ) {
+                                    data[sectorName] = annotation.description
+                                } else {
+                                    data[sectorName] = ''
+                                }
+                                break
+
+                            case 'left_kills':
+                            case 'right_kills':
+                            case 'left_towers':
+                            case 'right_towers':
+                            case 'left_heralds':
+                            case 'right_heralds':
+                            case 'left_drakes':
+                            case 'right_drakes':
+                                if (!isNaN(parseInt(annotation.description))) {
+                                    data[sectorName] = annotation.description
+                                }
+                                break
+
+                            case 'left_gold':
+                            case 'right_gold':
+                                if (
+                                    annotation.description.match(/^[0-9.]*k$/)
+                                ) {
+                                    data[sectorName] = annotation.description
+                                }
+                                break
+
+                            default:
                                 data[sectorName] = annotation.description
-                            } else {
-                                data[sectorName] = ''
-                            }
-                        } else if (
-                            sectorName === 'left_kills' ||
-                            sectorName === 'right_kills' ||
-                            sectorName === 'left_towers' ||
-                            sectorName === 'right_towers' ||
-                            sectorName === 'left_heralds' ||
-                            sectorName === 'right_heralds' ||
-                            sectorName === 'left_drakes' ||
-                            sectorName === 'right_drakes'
-                        ) {
-                            if (!isNaN(parseInt(annotation.description))) {
-                                data[sectorName] = annotation.description
-                            }
-                        } else if (
-                            sectorName === 'left_gold' ||
-                            sectorName === 'right_gold'
-                        ) {
-                            if (annotation.description.match(/^[0-9.]*k$/)) {
-                                data[sectorName] = annotation.description
-                            }
-                        } else if (sectorName !== null) {
-                            data[sectorName] = annotation.description
                         }
                     })
 
