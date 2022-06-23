@@ -1,29 +1,31 @@
 {
-  "name": "league-ocr-hud",
-  "version": "1.0.2",
-  "description": "",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "node .",
-    "package": "caxa -d . -c \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/src/index.js\" -o LeagueOCRHud.exe"
-  },
-  "engines": {
-    "node": ">=15"
-  },
-  "type": "module",
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@google-cloud/vision": "^2.3.1",
-    "grandiose": "0.0.4",
-    "jimp": "^0.16.1"
-  },
-  "devDependencies": {
-    "@jimp/custom": ">=0.3.5",
-    "@jimp/plugin-color": ">=0.8.0",
-    "@jimp/plugin-resize": ">=0.8.0",
-    "@jimp/plugin-threshold": "^0.16.1",
-    "caxa": "^1.0.0",
-    "eslint": "^7.22.0"
-  }
+    "name": "league-ocr-hud",
+    "version": "2.0.1",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node .",
+        "package": "caxa -i . -o LeagueOCRHud.exe -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/src/index.js\""
+    },
+    "engines": {
+        "node": ">=15"
+    },
+    "type": "module",
+    "author": "Daniel Shields <hello@danielshields.uk> (https://danielshields.uk)",
+    "contributors": [
+        "Joshua Fillingham <jjfillingham@gmail.com> (https://joshfill.uk)"
+    ],
+    "license": "ISC",
+    "dependencies": {
+        "@google-cloud/vision": "^2.3.1",
+        "@jimp/custom": ">=0.3.5",
+        "@jimp/plugin-color": ">=0.8.0",
+        "@jimp/plugin-resize": ">=0.8.0",
+        "@jimp/plugin-threshold": ">=0.16.1",
+        "grandiose": "0.0.4",
+        "jimp": "^0.16.1"
+    },
+    "devDependencies": {
+        "caxa": "^2.0.0",
+        "eslint": "^7.22.0"
+    }
 }
