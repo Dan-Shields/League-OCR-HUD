@@ -122,7 +122,7 @@ async function run() {
 
     const ndi = new NDI()
 
-    const maskImg = await Jimp.read('./src/mask.png')
+    const maskImg = await Jimp.read('./mask.png')
     new Jimp(1920, 70, '#000000', async (err, blankImg) => {
         if (err) {
             console.log(err)
