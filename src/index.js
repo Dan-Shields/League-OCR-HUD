@@ -1,6 +1,7 @@
 // Native
 import fs from 'fs'
 import path from 'path'
+import { spawnSync } from 'child_process'
 
 // Packages
 import vision from '@google-cloud/vision'
@@ -9,6 +10,23 @@ import Jimp from 'jimp'
 // Ours
 import NDI from './ndi.js'
 import { LeagueAPI } from './LeagueAPI.class.js'
+
+process.on('SIGINT', () => {
+    console.log('Caught interrupt signal')
+
+    process.exit()
+})
+
+function exit(code) {
+    spawnSync('pause ', { shell: true, stdio: [0, 1, 2] })
+
+    process.exit(code ?? 0)
+}
+
+process.on('uncaughtException', (e) => {
+    console.error(e)
+    exit(1)
+})
 
 let config = {
     outputDir: './output',
@@ -23,19 +41,19 @@ if (fs.existsSync('./config.json')) {
 
         if (!typeof configFileData === 'object' && configFileData !== null) {
             console.log('config.json was not an object.')
-            process.exit(1)
+            exit(1)
         }
 
         config = Object.assign(config, configFileData)
     } catch (err) {
         console.log("Couldn't read config.json")
-        process.exit(1)
+        exit(1)
     }
 } else {
     console.log(
         'No config found, please create one (config.json) and specify ndiFeed.'
     )
-    process.exit(1)
+    exit(1)
 }
 
 if (fs.existsSync('./sectors.json')) {
@@ -44,24 +62,24 @@ if (fs.existsSync('./sectors.json')) {
 
         if (!Array.isArray(sectorsFileData) && sectorsFileData !== null) {
             console.log('sectors.json was not an array.')
-            process.exit(1)
+            exit(1)
         }
 
         sectors = sectorsFileData
     } catch (err) {
         console.log("Couldn't read sectors.json")
-        process.exit(1)
+        exit(1)
     }
 } else {
     console.log(
         'No sectors found, please create one (sectors.json) and specify sectors.'
     )
-    process.exit(1)
+    exit(1)
 }
 
 if (!config.ndiFeed) {
     console.log('"ndiFeed" key not found in config.json.')
-    process.exit(1)
+    exit(1)
 }
 
 const CV_CREDENTIALS_PATH = path.join(process.cwd(), config.googleCVKeysFile)
@@ -69,7 +87,7 @@ let cvCredentials
 
 if (!fs.existsSync(CV_CREDENTIALS_PATH)) {
     console.log(`Google CV keys file not found at ${config.googleCVKeysFile}.`)
-    process.exit(1)
+    exit(1)
 } else {
     try {
         cvCredentials = JSON.parse(fs.readFileSync(CV_CREDENTIALS_PATH))
@@ -262,12 +280,6 @@ async function run() {
 }
 
 run()
-
-process.on('SIGINT', () => {
-    console.log('Caught interrupt signal')
-
-    process.exit()
-})
 
 const pendingWrites = []
 
