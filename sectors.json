@@ -1,16 +1,23 @@
 [
     {
-        "name": "drake_timer",
-        "left": 79,
-        "top": 36,
-        "width": 69,
-        "height": 34
+        "name": "left_drakes",
+        "left": 517,
+        "top": 13,
+        "width": 26,
+        "height": 32
     },
     {
-        "name": "left_drakes",
-        "left": 532,
-        "top": 5,
-        "width": 58,
+        "name": "left_heralds_and_nash",
+        "left": 592,
+        "top": 13,
+        "width": 30,
+        "height": 32
+    },
+    {
+        "name": "left_voidgrubs",
+        "left": 661,
+        "top": 13,
+        "width": 23,
         "height": 32
     },
     {
@@ -21,66 +28,59 @@
         "height": 32
     },
     {
-        "name": "left_heralds",
-        "left": 619,
-        "top": 5,
-        "width": 58,
-        "height": 32
-    },
-    {
         "name": "left_gold",
-        "left": 790,
+        "left": 802,
         "top": 7,
-        "width": 70,
+        "width": 54,
         "height": 45
     },
     {
         "name": "left_kills",
-        "left": 897,
+        "left": 903,
         "top": 17,
-        "width": 55,
-        "height": 36
+        "width": 49,
+        "height": 37
     },
     {
         "name": "right_kills",
-        "left": 980,
+        "left": 983,
         "top": 17,
-        "width": 55,
-        "height": 36
+        "width": 49,
+        "height": 37
     },
     {
         "name": "right_gold",
-        "left": 1112,
+        "left": 1105,
         "top": 7,
-        "width": 70,
+        "width": 54,
         "height": 45
     },
     {
         "name": "right_towers",
-        "left": 1233,
-        "top": 5,
-        "width": 58,
+        "left": 1178,
+        "top": 13,
+        "width": 29,
         "height": 32
     },
     {
-        "name": "right_heralds",
-        "left": 1315,
-        "top": 5,
-        "width": 58,
+        "name": "right_voidgrubs",
+        "left": 1248,
+        "top": 13,
+        "width": 23,
+        "height": 32
+    },
+    {
+        "name": "right_heralds_and_nash",
+        "left": 1326,
+        "top": 11,
+        "width": 25,
         "height": 32
     },
     {
         "name": "right_drakes",
-        "left": 1401,
-        "top": 5,
-        "width": 58,
-        "height": 32
-    },
-    {
-        "name": "baron_timer",
-        "left": 1810,
-        "top": 36,
-        "width": 72,
-        "height": 35
+        "left": 1404,
+        "top": 10,
+        "width": 25,
+        "height": 36
     }
 ]
