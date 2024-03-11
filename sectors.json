@@ -15,15 +15,15 @@
     },
     {
         "name": "left_voidgrubs",
-        "left": 661,
-        "top": 13,
-        "width": 23,
+        "left": 660,
+        "top": 7,
+        "width": 32,
         "height": 32
     },
     {
         "name": "left_towers",
-        "left": 707,
-        "top": 5,
+        "left": 714,
+        "top": 7,
         "width": 58,
         "height": 32
     },
@@ -58,9 +58,9 @@
     {
         "name": "right_towers",
         "left": 1178,
-        "top": 13,
+        "top": 7,
         "width": 29,
-        "height": 32
+        "height": 29
     },
     {
         "name": "right_voidgrubs",
@@ -82,5 +82,19 @@
         "top": 10,
         "width": 25,
         "height": 36
+    },
+    {
+        "name": "drake_timer",
+        "left": 1814,
+        "top": 42,
+        "width": 61,
+        "height": 30
+    },
+    {
+        "name": "baron_timer",
+        "left": 81,
+        "top": 42,
+        "width": 61,
+        "height": 30
     }
 ]
