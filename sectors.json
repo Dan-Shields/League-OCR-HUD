@@ -21,17 +21,24 @@
         "height": 32
     },
     {
-        "name": "left_heralds",
-        "left": 619,
-        "top": 5,
-        "width": 58,
+        "name": "left_heralds_and_nash",
+        "left": 592,
+        "top": 13,
+        "width": 30,
+        "height": 32
+    },
+    {
+        "name": "left_voidgrubs",
+        "left": 660,
+        "top": 7,
+        "width": 32,
         "height": 32
     },
     {
         "name": "left_gold",
-        "left": 790,
+        "left": 802,
         "top": 7,
-        "width": 70,
+        "width": 54,
         "height": 45
     },
     {
@@ -50,9 +57,9 @@
     },
     {
         "name": "right_gold",
-        "left": 1112,
+        "left": 1105,
         "top": 7,
-        "width": 70,
+        "width": 54,
         "height": 45
     },
     {
@@ -63,10 +70,17 @@
         "height": 32
     },
     {
-        "name": "right_heralds",
-        "left": 1315,
-        "top": 5,
-        "width": 58,
+        "name": "right_heralds_and_nash",
+        "left": 1326,
+        "top": 11,
+        "width": 25,
+        "height": 32
+    },
+    {
+        "name": "right_voidgrubs",
+        "left": 1248,
+        "top": 13,
+        "width": 23,
         "height": 32
     },
     {

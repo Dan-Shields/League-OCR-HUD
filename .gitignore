@@ -2,3 +2,4 @@ node_modules/
 *.keys.json
 output/
 config.json
+processed.png
